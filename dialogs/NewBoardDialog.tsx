@@ -48,7 +48,7 @@ const NewBoardDialog = ({
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: "columns",
+    name: "columns" as "columns",
   });
 
   async function onSubmit(values: z.infer<typeof NewBoardSchema>) {
