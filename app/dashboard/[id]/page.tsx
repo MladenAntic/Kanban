@@ -4,16 +4,17 @@ import TopBar from "@/components/TopBar";
 import { SidebarProvider } from "@/context/SidebarProvider";
 import { getBoards } from "@/lib/actions/board.action";
 import { getUserById } from "@/lib/actions/user.action";
-// import { auth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 const Page = async () => {
-  // const {userId} = auth()
-  const userId = "clerk123";
+  const { userId } = auth();
+
+  if (!userId) redirect("/");
+
   const mongoUser = await getUserById({ userId });
 
   const result = await getBoards({});
-
-  console.log(result);
 
   return (
     <SidebarProvider>
