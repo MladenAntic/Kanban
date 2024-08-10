@@ -2,9 +2,15 @@
 
 import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose";
-import { CreateUserParams, DeleteUserParams, UpdateUserParams } from "./shared.types";
+import {
+  CreateUserParams,
+  DeleteUserParams,
+  UpdateUserParams,
+} from "./shared.types";
+// import Board from "@/database/board.model";
+// import Task from "@/database/task.model";
 
-export const getUserById = async (params: any) => {
+export async function getUserById(params: any) {
   try {
     connectToDatabase();
 
@@ -16,7 +22,7 @@ export const getUserById = async (params: any) => {
   } catch (error) {
     console.log("=> getUserById error", error);
   }
-};
+}
 
 export async function createUser(userData: CreateUserParams) {
   try {
@@ -40,7 +46,6 @@ export async function updateUser(params: UpdateUserParams) {
     await User.findOneAndUpdate({ clerkId }, updateData, {
       new: true,
     });
-
   } catch (error) {
     console.log(error);
     throw error;
@@ -59,16 +64,11 @@ export async function deleteUser(params: DeleteUserParams) {
       throw new Error("User not found");
     }
 
-    // TODO
-
-    // Delete user from database
-    // and all boards
-
-    // get user board ids
-    // const userBoardIds = await Board.find({ author: user._id}).distinct('_id');
-
-    // delete user questions
+    // // Delete the boards
     // await Board.deleteMany({ author: user._id });
+
+    // // Delete the tasks
+    // await Task.deleteMany({ author: user._id });
 
     const deletedUser = await User.findByIdAndDelete(user._id);
 
@@ -78,4 +78,3 @@ export async function deleteUser(params: DeleteUserParams) {
     throw error;
   }
 }
-

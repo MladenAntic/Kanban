@@ -1,8 +1,9 @@
-// import BoardSpace from "@/components/BoardSpace";
+import CustomKanban from "@/components/kanban/CustomKanban";
 import Sidebar from "@/components/Sidebar";
 import TopBar from "@/components/TopBar";
 import { SidebarProvider } from "@/context/SidebarProvider";
 import { getBoards } from "@/lib/actions/board.action";
+import { getTasks } from "@/lib/actions/task.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -14,21 +15,26 @@ const Page = async () => {
 
   const mongoUser = await getUserById({ userId });
 
-  const result = await getBoards({});
+  const resultBoards = await getBoards({ author: mongoUser });
+  const resultTasks = await getTasks({ author: mongoUser });
 
   return (
     <SidebarProvider>
       <div className={`relative flex w-screen`}>
         <Sidebar
-          mongoUserId={JSON.stringify(mongoUser._id)}
-          boards={result?.boards}
+          mongoUserId={mongoUser._id}
+          boards={resultBoards?.boards}
         />
         <div className="w-full">
           <TopBar
-            boards={result?.boards}
-            mongoUserId={JSON.stringify(mongoUser._id)}
+            boards={resultBoards?.boards}
+            mongoUserId={mongoUser._id}
+            tasks={resultTasks?.tasks}
           />
-          {/* <BoardSpace mongoUserId={JSON.stringify(mongoUser._id)} boards={result.boards} /> */}
+          <CustomKanban
+            boards={resultBoards?.boards}
+            tasks={resultTasks?.tasks}
+          />
         </div>
       </div>
     </SidebarProvider>

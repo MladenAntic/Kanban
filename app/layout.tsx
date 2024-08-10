@@ -12,7 +12,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Kanban",
   description:
-    "Kanban is not just another to-do list. It is an advanced task management app built to help you organize everything from groceries to enterprise level tasks.",
+    "Kanban is not just another to-do list. It's an advanced task management app built to help you organize everything from groceries to enterprise level tasks.",
   keywords:
     "kanban, task management, to-do list, productivity, project management, task tracking, task manager, task app, board",
 };

@@ -14,23 +14,24 @@ const Page = async () => {
 
   const mongoUser = await getUserById({ userId });
 
-  const result = await getBoards({});
+  const resultBoards = await getBoards({author: mongoUser});
 
   return (
     <SidebarProvider>
       <div className={`relative flex w-screen`}>
         <Sidebar
-          mongoUserId={JSON.stringify(mongoUser._id)}
-          boards={result?.boards}
+          mongoUserId={mongoUser._id}
+          boards={resultBoards?.boards}
         />
         <div className="w-full">
           <TopBar
-            boards={result?.boards}
-            mongoUserId={JSON.stringify(mongoUser._id)}
+            mongoUserName={mongoUser.username}
+            boards={resultBoards?.boards}
+            mongoUserId={mongoUser._id}
           />
           <BoardSpace
-            mongoUserId={JSON.stringify(mongoUser._id)}
-            boards={result?.boards}
+            mongoUserId={mongoUser._id}
+            boards={resultBoards?.boards}
           />
         </div>
       </div>

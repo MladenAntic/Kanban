@@ -6,7 +6,7 @@ import ToggleMenu from "./navbar/ToggleMenu";
 
 const Navbar = () => {
   return (
-    <nav className="relative z-[99] bg-white dark:bg-darkGray">
+    <nav className="relative z-[99] border-b bg-white dark:border-darkGray dark:bg-darkGray">
       <Wrapper className="relative flex items-center justify-between py-8">
         <Logo />
         <ThemeToggler sheet={false} />

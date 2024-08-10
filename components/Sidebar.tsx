@@ -11,6 +11,8 @@ import NewBoardDialog from "@/dialogs/NewBoardDialog";
 import { useState } from "react";
 import { useSidebar } from "@/context/SidebarProvider";
 import { Board } from "@/types";
+import { MdDashboardCustomize } from "react-icons/md";
+import Link from "next/link";
 
 const Sidebar = ({
   mongoUserId,
@@ -36,7 +38,7 @@ const Sidebar = ({
         <h5 className="pl-8 text-xs font-bold uppercase tracking-[2.4px] text-mediumGray">
           All Boards
         </h5>
-        <div className="my-4">
+        <div className="my-4 flex max-h-[400px] flex-col gap-1 overflow-y-auto scrollbar-hide">
           {boards?.map((board) => (
             <BoardName key={board.name} name={board.name} />
           ))}
@@ -56,6 +58,14 @@ const Sidebar = ({
             + Create New Board
           </span>
         </button>
+        <Link
+          href="/dashboard"
+          className="mt-10 flex items-center gap-2 pl-8 transition-opacity duration-200 hover:opacity-75"
+        >
+          <span className="flex items-center gap-2 text-[15px] font-bold text-darkBlue">
+            <MdDashboardCustomize /> Return to Dashboard
+          </span>
+        </Link>
       </div>
 
       <div
@@ -86,6 +96,7 @@ const Sidebar = ({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         mongoUserId={mongoUserId}
+        boards={boards}
       />
     </aside>
   );

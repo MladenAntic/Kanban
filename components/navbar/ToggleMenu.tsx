@@ -42,9 +42,33 @@ const ToggleMenu = () => {
           <SignInBtn navbar={false} sheet={true} />
           <ThemeToggler sheet={true} />
           <div
-            className={`flex h-fit flex-col items-center gap-2 rounded-md p-5 shadow-lg ${mode === "dark" ? "bg-darkerGray text-white" : "bg-white"}`}
+            className={`flex h-fit flex-col items-center gap-2 rounded-md p-5 text-sm shadow-lg ${mode === "dark" ? "bg-darkerGray text-white" : "bg-white"}`}
           >
-            New to Kanban?{" "}
+            <span className="flex items-center gap-2">
+              New to{" "}
+              {
+                <>
+                  {mode === "dark" ? (
+                    <Image
+                      src="/logo-dark.svg"
+                      alt="Kanban Logo"
+                      width={75}
+                      height={25}
+                      className="inline"
+                    />
+                  ) : (
+                    <Image
+                      src="/logo-light.svg"
+                      alt="Kanban Logo"
+                      width={75}
+                      height={25}
+                      className="inline"
+                    />
+                  )}
+                </>
+              }
+              ?
+            </span>{" "}
             <Link href="/sign-up" className="text-sm font-bold underline">
               Create your account
             </Link>

@@ -7,36 +7,46 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { deleteBoard } from "@/lib/actions/board.action";
-import { Board } from "@/types";
+import { DeleteBoardDialogProps } from "@/types";
+import { useState } from "react";
 
 const DeleteBoardDialog = ({
   isOpen,
   setIsDeleteOpen,
   boards,
-}: {
-  isOpen: boolean;
-  setIsDeleteOpen: (value: boolean) => void;
-  boards: Board[];
-}) => {
+  pathname,
+  decodedId,
+}: DeleteBoardDialogProps) => {
   const router = useRouter();
   const { toast } = useToast();
-  const pathname = usePathname();
 
-  const pathSegments = pathname.split("/");
-  const id = pathSegments[pathSegments.length - 1];
-  const decodedId = decodeURIComponent(id);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const currentBoard = boards.find((board) => board.name === decodedId);
 
   const deleteCurrentBoard = async () => {
-    await deleteBoard({ name: decodedId, path: pathname });
+    try {
+      setIsSubmitting(true);
 
-    toast({
-      title: "Board Successfully Deleted!",
-    });
+      await deleteBoard({
+        boardId: currentBoard?._id || "",
+        name: decodedId,
+        path: pathname,
+      });
 
-    router.push("/dashboard");
+      toast({
+        title: "Board Successfully Deleted!",
+      });
+
+      router.push("/dashboard");
+    } catch (error) {
+      console.log("Error deleting board: ", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const keepCurrentBoard = () => {
@@ -62,9 +72,9 @@ const DeleteBoardDialog = ({
           <button
             onClick={deleteCurrentBoard}
             type="button"
-            className="flex-1 rounded-[20px] bg-errorDark py-2 text-[13px] font-bold leading-[23px] text-white transition-opacity duration-200 hover:opacity-60"
+            className="flex flex-1 items-center justify-center rounded-[20px] bg-errorDark py-2 text-[13px] font-bold leading-[23px] text-white transition-opacity duration-200 hover:opacity-60"
           >
-            Delete
+            {isSubmitting ? <div className="loader"></div> : "Delete"}
           </button>
           <button
             onClick={keepCurrentBoard}

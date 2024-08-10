@@ -4,15 +4,10 @@ import { UserButton } from "@clerk/nextjs";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Logo from "./shared/Logo";
 import { useTheme } from "@/context/ThemeProvider";
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaArrowLeft } from "react-icons/fa";
 import { useState } from "react";
-
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import Image from "next/image";
-import BoardName from "./sidebar/BoardName";
-import ThemeToggler from "./shared/ThemeToggler";
 import { useSidebar } from "@/context/SidebarProvider";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
   DropdownMenu,
@@ -23,20 +18,30 @@ import {
 import EditBoardDialog from "@/dialogs/EditBoardDialog";
 import DeleteBoardDialog from "@/dialogs/DeleteBoardDialog";
 import NewBoardDialog from "@/dialogs/NewBoardDialog";
-import { Board } from "@/types";
+import { Board, Task } from "@/types";
+import AddNewTaskDialog from "@/dialogs/AddNewTaskDialog";
+import MobileDropdown from "./shared/MobileDropdown";
 
 const TopBar = ({
   boards = [],
+  tasks = [],
   mongoUserId,
+  mongoUserName,
 }: {
   boards?: Board[];
+  tasks?: Task[];
   mongoUserId: string;
+  mongoUserName?: string;
 }) => {
+  const router = useRouter();
   const { mode } = useTheme();
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isBoardDropdownOpen, setIsBoardDropdownOpen] = useState(false);
   const [isNewBoardOpen, setIsNewBoardOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
   const { isSidebarClosed } = useSidebar();
 
   const pathname = usePathname();
@@ -47,14 +52,21 @@ const TopBar = ({
 
   const handleNewBoard = () => {
     setIsNewBoardOpen(true);
+    setIsBoardDropdownOpen(false);
   };
 
   const handleEditBoard = async () => {
     setIsEditOpen(true);
+    setIsDropdownOpen(false);
   };
 
   const handleDeleteBoard = async () => {
     setIsDeleteOpen(true);
+    setIsDropdownOpen(false);
+  };
+
+  const handleClick = () => {
+    router.back();
   };
 
   return (
@@ -75,11 +87,27 @@ const TopBar = ({
           <></>
         )}
         <div className="flex items-center gap-2">
-          <h3
-            className={`font-bold ${mode === "light" ? "text-almostBlack" : "text-white"} max-sm:text-base md:text-base lg:text-2xl`}
-          >
-            {decodedId === "dashboard" ? "" : decodedId}
-          </h3>
+          <div className="relative">
+            <h3
+              className={`font-bold ${mode === "light" ? "text-almostBlack" : "text-white"} max-sm:text-base md:text-base lg:text-2xl`}
+            >
+              {decodedId === "dashboard"
+                ? `Welcome, ${mongoUserName}!`
+                : decodedId}
+            </h3>
+            {decodedId === "dashboard" ? (
+              <></>
+            ) : (
+              <button
+                type="button"
+                onClick={() => handleClick()}
+                className="absolute left-0 top-[-25px] flex w-[100px] items-center gap-2 text-xs font-bold text-mediumGray hover:opacity-75"
+              >
+                <FaArrowLeft />
+                Go back
+              </button>
+            )}
+          </div>
           <button
             type="button"
             onClick={() => setIsBoardDropdownOpen(true)}
@@ -88,43 +116,6 @@ const TopBar = ({
             {isBoardDropdownOpen ? (
               <>
                 <FaChevronDown className="rotate-180 text-lg text-mediumGray transition-transform duration-200" />
-                <Dialog
-                  open={isBoardDropdownOpen}
-                  onOpenChange={setIsBoardDropdownOpen}
-                >
-                  <DialogContent className="absolute top-[260px] w-4/5 md:hidden">
-                    <div className="flex flex-col">
-                      <h5 className="pl-8 text-xs font-bold uppercase tracking-[2.4px] text-mediumGray">
-                        All Boards
-                      </h5>
-                      <div className="my-4">
-                        {boards?.map((board, index) => (
-                          <BoardName key={index} name={board.name} />
-                        ))}
-                      </div>
-                      <button
-                        onClick={handleNewBoard}
-                        type="button"
-                        className="flex items-center gap-2 pl-8 transition-opacity duration-200 hover:opacity-75"
-                      >
-                        <Image
-                          src="/board-icon-purple.svg"
-                          width={16}
-                          height={16}
-                          alt="Board Icon"
-                        />
-                        <span className="text-[15px] font-bold text-darkBlue">
-                          + Create New Board
-                        </span>
-                      </button>
-                      <div
-                        className={`mt-6 flex h-[48px] w-full items-center justify-center rounded-md ${mode === "light" ? "bg-lightGray" : "bg-darkGray"} py-4`}
-                      >
-                        <ThemeToggler sheet={true} />
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
               </>
             ) : (
               <FaChevronDown className="rotate-0 text-lg text-mediumGray transition-transform duration-200" />
@@ -140,13 +131,17 @@ const TopBar = ({
             <button
               type="button"
               className="flex h-[48px] w-[164px] items-center justify-center gap-1 rounded-3xl bg-darkBlue text-[15px] font-bold text-white transition-colors duration-200 hover:bg-lightBlue disabled:cursor-not-allowed disabled:bg-lightBlue max-sm:h-[32px] max-sm:w-[48px] md:h-[32px] md:w-[48px] lg:h-[48px] lg:w-[164px]"
+              onClick={() => setIsNewTaskOpen(true)}
             >
               +{" "}
               <span className="max-sm:hidden md:hidden lg:block">
                 Add New Task
               </span>
             </button>
-            <DropdownMenu>
+            <DropdownMenu
+              open={isDropdownOpen}
+              onOpenChange={setIsDropdownOpen}
+            >
               <DropdownMenuTrigger>
                 <div className="flex items-center justify-center">
                   <BsThreeDotsVertical className="text-2xl text-mediumGray" />
@@ -172,26 +167,51 @@ const TopBar = ({
             </DropdownMenu>
           </>
         )}
-        <UserButton />
+        <UserButton afterSignOutUrl="/" />
       </div>
+
+      <MobileDropdown
+        boards={boards}
+        isBoardDropdownOpen={isBoardDropdownOpen}
+        setIsBoardDropdownOpen={setIsBoardDropdownOpen}
+        handleNewBoard={handleNewBoard}
+        mode={mode}
+      />
 
       <NewBoardDialog
         isOpen={isNewBoardOpen}
         setIsOpen={setIsNewBoardOpen}
         mongoUserId={mongoUserId}
+        pathname={pathname}
+        boards={boards}
       />
 
       <EditBoardDialog
         isOpen={isEditOpen}
         setIsOpen={setIsEditOpen}
-        mongoUserId={mongoUserId}
         boards={boards}
+        pathname={pathname}
+        decodedId={decodedId}
       />
 
       <DeleteBoardDialog
         isOpen={isDeleteOpen}
         boards={boards}
         setIsDeleteOpen={setIsDeleteOpen}
+        pathname={pathname}
+        decodedId={decodedId}
+      />
+
+      <AddNewTaskDialog
+        tasks={tasks}
+        pathname={pathname}
+        isOpen={isNewTaskOpen}
+        setIsOpen={setIsNewTaskOpen}
+        selectOptions={
+          boards.filter((board) => board.name === decodedId)[0]?.columns || []
+        }
+        mongoUserId={mongoUserId}
+        boardId={boards.filter((board) => board.name === decodedId)[0]?._id}
       />
     </div>
   );

@@ -9,11 +9,13 @@ export interface CreateNewBoardParams {
 }
 
 export interface DeleteBoardParams {
+  boardId: string;
   name: string;
   path: string;
 }
 
 export interface EditBoardParams {
+  id: string;
   name: string;
   columns: string[];
   path: string;
@@ -34,4 +36,23 @@ export interface UpdateUserParams {
 
 export interface DeleteUserParams {
   clerkId: string;
+}
+
+export interface CreateNewTaskParams {
+  title: string;
+  description?: string;
+  subtasks?: string[];
+  status: string;
+  author: Schema.Types.ObjectId | IUser;
+  board: string;
+  path: string;
+}
+
+export interface EditTaskParams {
+  id: string,
+  title: string;
+  description?: string;
+  subtasks?: string[];
+  status: string;
+  path: string;
 }
