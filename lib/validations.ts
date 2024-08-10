@@ -7,8 +7,8 @@ export const NewBoardSchema = z.object({
     .min(2, {
       message: "Name must be at least 2 characters.",
     })
-    .max(50, {
-      message: "Maximum of 50 characters.",
+    .max(75, {
+      message: "Maximum of 75 characters.",
     }),
   columns: z.array(
     z
@@ -31,23 +31,23 @@ export const NewTaskSchema = (options: string[]) =>
       .min(2, {
         message: "Task name must be at least 2 characters.",
       })
-      .max(50, {
-        message: "Maximum of 25 characters.",
+      .max(75, {
+        message: "Maximum of 75 characters.",
       }),
     subtasks: z.array(
       z
         .string()
         .trim()
-        .max(75, {
-          message: "Maximum of 75 characters.",
+        .max(150, {
+          message: "Maximum of 150 characters.",
         })
         .optional()
     ),
     description: z
       .string()
       .trim()
-      .max(150, {
-        message: "Maximum of 200 characters.",
+      .max(250, {
+        message: "Maximum of 250 characters.",
       })
       .optional(),
     select: z.string().refine((val) => options.includes(val), {
