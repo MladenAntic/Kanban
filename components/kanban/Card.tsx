@@ -13,7 +13,7 @@ const Card: React.FC<CardProps> = ({
   status,
   handleDragStart,
   board,
-  tasks
+  tasks,
 }) => {
   const [isTaskOpen, setIsTaskOpen] = useState(false);
   const [checkedSubtasks, setCheckedSubtasks] = useState<string[]>([]);
@@ -49,7 +49,7 @@ const Card: React.FC<CardProps> = ({
         className="group mb-3 w-[280px] cursor-pointer rounded-lg border bg-white p-3 shadow-md active:cursor-grabbing dark:border-darkGray dark:bg-darkerGray"
         onClick={() => setIsTaskOpen(true)}
       >
-        <p className="text-[15px] font-bold text-almostBlack group-hover:text-darkBlue dark:text-white">
+        <p className="text-wrap text-[15px] font-bold text-almostBlack group-hover:text-darkBlue dark:text-white">
           {title}
         </p>
         <span className="text-xs font-bold text-mediumGray">
