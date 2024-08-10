@@ -129,7 +129,7 @@ const EditTaskDialog = ({
 
       setIsOpen(false);
 
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.log("=> updateTask error", error);
     } finally {

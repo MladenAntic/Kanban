@@ -41,7 +41,7 @@ const DeleteTaskDialog = ({
 
       setIsDeleteOpen(false);
 
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.log("Error deleting task", error);
     } finally {

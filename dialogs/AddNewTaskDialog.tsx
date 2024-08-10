@@ -121,7 +121,7 @@ const AddNewTaskDialog = ({
 
       setIsOpen(false);
 
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.log("=> createNewTask error", error);
     } finally {
