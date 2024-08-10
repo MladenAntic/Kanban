@@ -127,7 +127,9 @@ const EditTaskDialog = ({
         title: "Task Updated Successfully!",
       });
 
-      window.location.reload();
+      setIsOpen(false);
+
+      // window.location.reload();
     } catch (error) {
       console.log("=> updateTask error", error);
     } finally {

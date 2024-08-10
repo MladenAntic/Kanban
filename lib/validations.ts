@@ -47,7 +47,7 @@ export const NewTaskSchema = (options: string[]) =>
       .string()
       .trim()
       .max(150, {
-        message: "Maximum of 150 characters.",
+        message: "Maximum of 200 characters.",
       })
       .optional(),
     select: z.string().refine((val) => options.includes(val), {
