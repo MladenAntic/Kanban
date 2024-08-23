@@ -70,7 +70,7 @@ const NewBoardDialog = ({
   async function onSubmit(values: z.infer<typeof NewBoardSchema>) {
     try {
       setIsSubmitting(true);
-      
+
       const isDuplicateName = boards?.some(
         (board) => board.name === values.name
       );
@@ -183,6 +183,7 @@ const NewBoardDialog = ({
                 + Add New Column
               </button>
               <button
+                disabled={isSubmitting}
                 type="submit"
                 className="flex h-[40px] w-full items-center justify-center rounded-full bg-darkBlue font-bold text-white transition-opacity duration-200 hover:opacity-75 dark:bg-darkBlue dark:text-white"
               >

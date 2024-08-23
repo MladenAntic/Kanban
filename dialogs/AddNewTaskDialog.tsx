@@ -264,6 +264,7 @@ const AddNewTaskDialog = ({
                 )}
               />
               <button
+                disabled={isSubmitting}
                 type="submit"
                 className="flex h-[40px] w-full items-center justify-center rounded-full bg-darkBlue font-bold text-white transition-opacity duration-200 hover:opacity-75 dark:bg-darkBlue dark:text-white"
               >

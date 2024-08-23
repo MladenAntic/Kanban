@@ -70,6 +70,7 @@ const DeleteBoardDialog = ({
 
         <div className="mt-4 flex items-center gap-4">
           <button
+            disabled={isSubmitting}
             onClick={deleteCurrentBoard}
             type="button"
             className="flex flex-1 items-center justify-center rounded-[20px] bg-errorDark py-2 text-[13px] font-bold leading-[23px] text-white transition-opacity duration-200 hover:opacity-60"

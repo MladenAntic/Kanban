@@ -30,7 +30,7 @@ const AddNewColumnDialog = ({
   setIsOpen,
   boardId,
 }: AddNewColumnDialogProps) => {
-  const {toast} = useToast();
+  const { toast } = useToast();
   const pathname = usePathname();
   const form = useForm<z.infer<typeof NewColumnSchema>>({
     resolver: zodResolver(NewColumnSchema),
@@ -50,7 +50,6 @@ const AddNewColumnDialog = ({
       toast({
         title: "Column created successfully!",
       });
-      
     } catch (error) {
       console.log("=> createNewColumn error", error);
     } finally {
@@ -93,6 +92,7 @@ const AddNewColumnDialog = ({
             />
             <div className="mt-2 flex flex-col gap-3">
               <button
+                disabled={isSubmitting}
                 type="submit"
                 className="flex h-[40px] w-full items-center justify-center rounded-full bg-darkBlue font-bold text-white transition-opacity duration-200 hover:opacity-75 dark:bg-darkBlue dark:text-white"
               >
